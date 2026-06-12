@@ -3,60 +3,67 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>VisitMe</title>
+<title>VisitMe — Free Subdomains</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
-  font-family:Arial,sans-serif;
+  font-family:Arial,Helvetica,sans-serif;
   min-height:100vh;
-  background:radial-gradient(circle at top left,#7c5cff55,transparent 35%),
-             radial-gradient(circle at bottom right,#00ffd555,transparent 35%),
-             #090a14;
+  background:
+    radial-gradient(circle at top left,#8b5cff66,transparent 35%),
+    radial-gradient(circle at bottom right,#00ffd566,transparent 35%),
+    #080914;
   color:white;
 }
 
 .wrapper{
-  max-width:1100px;
+  max-width:1150px;
   margin:auto;
-  padding:40px 20px;
+  padding:35px 20px 70px;
 }
 
-.hero{text-align:center;padding:70px 0 40px}
+.hero{
+  text-align:center;
+  padding:60px 0 35px;
+}
 
 .badge{
   display:inline-block;
   padding:10px 16px;
   border-radius:999px;
   background:#ffffff14;
-  border:1px solid #ffffff30;
+  border:1px solid #ffffff2b;
   margin-bottom:22px;
+  color:#e6e1ff;
 }
 
 h1{
-  font-size:clamp(54px,10vw,110px);
+  font-size:clamp(56px,10vw,120px);
+  line-height:.9;
+  letter-spacing:-4px;
   background:linear-gradient(90deg,#fff,#9b7cff,#00ffd5);
   -webkit-background-clip:text;
   color:transparent;
 }
 
 .subtitle{
-  max-width:700px;
+  max-width:760px;
   margin:25px auto;
-  color:#d9d9ed;
+  color:#d7d7ec;
   font-size:22px;
   line-height:1.5;
 }
 
 .panel{
-  max-width:740px;
+  max-width:780px;
   margin:35px auto;
-  padding:24px;
-  border-radius:28px;
-  background:#111426dd;
+  padding:26px;
+  border-radius:30px;
+  background:#12152bdd;
   border:1px solid #ffffff22;
-  box-shadow:0 30px 80px #0008;
+  box-shadow:0 30px 90px #0009;
 }
 
 .domain{
@@ -82,11 +89,20 @@ input{
   outline:none;
 }
 
+input::placeholder{color:#aaa}
+
 .result{
   margin-top:15px;
   color:#9bffbf;
   font-size:20px;
   min-height:28px;
+}
+
+.easter{
+  margin-top:10px;
+  color:#ffdf7c;
+  font-weight:bold;
+  min-height:24px;
 }
 
 .buttons{
@@ -106,6 +122,7 @@ input{
   transition:.2s;
   border:1px solid #ffffff20;
   cursor:pointer;
+  font-size:16px;
 }
 
 .btn:hover{transform:translateY(-3px) scale(1.02)}
@@ -113,11 +130,37 @@ input{
 .primary{background:linear-gradient(135deg,#7c5cff,#00ffd5);color:#050611}
 .secondary{background:#ffffff14}
 .donate{background:linear-gradient(135deg,#ff4d7d,#ffb86b);color:#19040a}
+.share{background:linear-gradient(135deg,#00ffd5,#b7ff5c);color:#06100d}
 
-.grid{
+.stats{
   margin-top:50px;
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:16px;
+}
+
+.stat{
+  padding:22px;
+  border-radius:22px;
+  background:#111426dd;
+  border:1px solid #ffffff18;
+  text-align:center;
+}
+
+.stat h2{
+  font-size:34px;
+  color:#9b7cff;
+}
+
+.stat p{
+  margin-top:8px;
+  color:#cfcfe4;
+}
+
+.grid{
+  margin-top:45px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
   gap:18px;
 }
 
@@ -138,7 +181,13 @@ input{
 
 .section h2{
   font-size:36px;
-  margin-bottom:22px;
+  margin-bottom:14px;
+}
+
+.section-text{
+  color:#d6d6e8;
+  margin-bottom:24px;
+  line-height:1.5;
 }
 
 .links{
@@ -154,6 +203,7 @@ input{
   border:1px solid #ffffff18;
   color:#00ffd5;
   font-family:monospace;
+  word-break:break-all;
 }
 
 .random-box{
@@ -170,6 +220,31 @@ input{
   margin:12px 0 24px;
 }
 
+.badge-code{
+  margin-top:18px;
+  padding:18px;
+  background:#050611;
+  border-radius:16px;
+  color:#9bffbf;
+  font-family:monospace;
+  word-break:break-all;
+  border:1px solid #ffffff18;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:25px;
+  transform:translateX(-50%);
+  background:#111426;
+  border:1px solid #ffffff25;
+  color:white;
+  padding:14px 18px;
+  border-radius:14px;
+  display:none;
+  box-shadow:0 20px 60px #0009;
+}
+
 .footer{
   margin-top:60px;
   text-align:center;
@@ -177,11 +252,9 @@ input{
   font-size:14px;
 }
 
-.easter{
-  margin-top:12px;
-  color:#ffdf7c;
-  font-weight:bold;
-  min-height:24px;
+@media(max-width:600px){
+  .panel{padding:18px}
+  .btn{width:100%;text-align:center}
 }
 </style>
 </head>
@@ -195,8 +268,8 @@ input{
   <h1>VisitMe</h1>
 
   <p class="subtitle">
-    Get your own free subdomain for your website, portfolio, game, blog or project.
-    Not just links — your tiny home on the web.
+    Claim your place on the Internet. Get a free subdomain for your website,
+    portfolio, game, blog or project.
   </p>
 
   <div class="panel">
@@ -208,16 +281,44 @@ input{
     <div class="easter" id="easter"></div>
 
     <div class="buttons">
-      <a class="btn primary" href="https://github.com/n6767ooo6767-cmyk/.visitme.qzz.io" target="_blank">
+      <a class="btn primary"
+         href="https://github.com/n6767ooo6767-cmyk/.visitme.qzz.io/issues/new/choose"
+         target="_blank">
         Get Subdomain
       </a>
 
       <button class="btn secondary" onclick="randomVisit()">🎲 Random Visit</button>
 
-      <a class="btn donate" href="https://dalink.to/visitme_real" target="_blank">
+      <button class="btn share" onclick="shareVisitMe()">Share VisitMe</button>
+
+      <a class="btn donate"
+         href="https://dalink.to/visitme_real"
+         target="_blank">
         ❤️ Say Thanks
       </a>
     </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="stat">
+    <h2>5</h2>
+    <p>Domains claimed</p>
+  </div>
+
+  <div class="stat">
+    <h2>Free</h2>
+    <p>Subdomains for creators</p>
+  </div>
+
+  <div class="stat">
+    <h2>Open</h2>
+    <p>GitHub-based requests</p>
+  </div>
+
+  <div class="stat">
+    <h2>Fun</h2>
+    <p>Tiny homes on the web</p>
   </div>
 </section>
 
@@ -244,11 +345,25 @@ input{
 </section>
 
 <section class="section">
+  <h2>Newest domains</h2>
+  <p class="section-text">The first tiny homes are already being claimed.</p>
+
+  <div class="links">
+    <div class="link">site.visitme.qzz.io</div>
+    <div class="link">game.visitme.qzz.io</div>
+    <div class="link">blog.visitme.qzz.io</div>
+    <div class="link">portfolio.visitme.qzz.io</div>
+    <div class="link">test.visitme.qzz.io</div>
+  </div>
+</section>
+
+<section class="section">
   <h2>Example addresses</h2>
+  <p class="section-text">Small links for big ideas.</p>
 
   <div class="links">
     <div class="link">alex.visitme.qzz.io</div>
-    <div class="link">game.visitme.qzz.io</div>
+    <div class="link">mygame.visitme.qzz.io</div>
     <div class="link">portfolio.visitme.qzz.io</div>
     <div class="link">blog.visitme.qzz.io</div>
   </div>
@@ -261,29 +376,56 @@ input{
 </section>
 
 <section class="section">
-  <h2>Why VisitMe?</h2>
+  <h2>Share your tiny home</h2>
+  <p class="section-text">
+    Tell your friends and let them claim their own place on the web.
+  </p>
 
-  <div class="links">
-    <div class="link">Free</div>
-    <div class="link">Open Source</div>
-    <div class="link">Easy to Share</div>
-    <div class="link">Creator Friendly</div>
+  <button class="btn share" onclick="shareVisitMe()">Copy share text</button>
+
+  <div class="badge-code" id="shareText">
+    I got my own tiny home on the web: yourname.visitme.qzz.io — get yours at https://site.visitme.qzz.io
   </div>
 </section>
 
+<section class="section">
+  <h2>Powered by VisitMe</h2>
+  <p class="section-text">Add this badge to your own page.</p>
+
+  <div class="badge-code">
+    &lt;a href="https://site.visitme.qzz.io"&gt;Powered by VisitMe&lt;/a&gt;
+  </div>
+</section>
+
+<section class="section">
+  <h2>Rules</h2>
+  <p class="section-text">
+    Personal sites, portfolios, games and open-source projects are welcome.
+    Phishing, scams, malware, spam and impersonation are not allowed.
+  </p>
+</section>
+
 <div class="footer">
-  VisitMe © 2026 · Build your tiny home on the web.
+  VisitMe © 2026 · Not just links. Your tiny home on the web.
 </div>
 
 </div>
+
+<div class="toast" id="toast">Copied!</div>
 
 <script>
 const creators = [
-  "alex.visitme.qzz.io",
+  "site.visitme.qzz.io",
   "game.visitme.qzz.io",
-  "portfolio.visitme.qzz.io",
   "blog.visitme.qzz.io",
-  "site.visitme.qzz.io"
+  "portfolio.visitme.qzz.io",
+  "test.visitme.qzz.io"
+];
+
+const reserved = [
+  "admin","root","api","mail","ftp","www","support",
+  "github","google","apple","microsoft","discord","telegram",
+  "bank","paypal","login","signin","security"
 ];
 
 function updatePreview(){
@@ -300,17 +442,27 @@ function updatePreview(){
   if(!value){
     preview.textContent = "yourname.visitme.qzz.io";
     result.textContent = "Type a name to preview your subdomain";
+    result.style.color = "#9bffbf";
     easter.textContent = "";
     return;
   }
 
   preview.textContent = value + ".visitme.qzz.io";
-  result.textContent = "Looks good: " + value + ".visitme.qzz.io";
+
+  if(reserved.includes(value)){
+    result.textContent = "This name is reserved.";
+    result.style.color = "#ff7c7c";
+  } else {
+    result.textContent = "Looks good: " + value + ".visitme.qzz.io";
+    result.style.color = "#9bffbf";
+  }
 
   if(value === "visitme"){
     easter.textContent = "🎉 You found the secret VisitMe name!";
   } else if(value === "creator"){
     easter.textContent = "🚀 Creator mode unlocked!";
+  } else if(value === "admin"){
+    easter.textContent = "😎 Nice try.";
   } else {
     easter.textContent = "";
   }
@@ -318,7 +470,37 @@ function updatePreview(){
 
 function randomVisit(){
   const random = creators[Math.floor(Math.random() * creators.length)];
-  window.open("https://" + random, "_blank");
+  window.open("http://" + random, "_blank");
+}
+
+function showToast(text){
+  const toast = document.getElementById("toast");
+  toast.textContent = text;
+  toast.style.display = "block";
+  setTimeout(() => {
+    toast.style.display = "none";
+  }, 1800);
+}
+
+function shareVisitMe(){
+  const input = document.getElementById("nameInput");
+  let value = input.value
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g,"")
+    .replace(/--+/g,"-");
+
+  const domain = value ? value + ".visitme.qzz.io" : "yourname.visitme.qzz.io";
+
+  const text =
+    "I got my own tiny home on the web: " +
+    domain +
+    " — get yours at https://site.visitme.qzz.io";
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast("Share text copied!");
+  }).catch(() => {
+    showToast("Copy failed");
+  });
 }
 </script>
 
