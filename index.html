@@ -1,112 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>visitme.qzz.io</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f1020;
-      color: #ffffff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VisitMe</title>
 
-    .card {
-      max-width: 800px;
-      padding: 40px;
-      background: #17182e;
-      border-radius: 24px;
-      box-shadow: 0 0 40px rgba(0,0,0,0.4);
-      text-align: center;
-    }
+<style>
 
-    h1 {
-      font-size: 48px;
-      margin-bottom: 10px;
-      color: #9b7cff;
-    }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
-    p {
-      font-size: 20px;
-      color: #d5d5e8;
-    }
+body{
+font-family:Arial,Helvetica,sans-serif;
+background:#0f1020;
+color:white;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
 
-    .domain {
-      margin: 30px 0;
-      padding: 20px;
-      background: #0b0c18;
-      border: 2px solid #9b7cff;
-      border-radius: 16px;
-      font-size: 28px;
-      font-family: monospace;
-    }
+.card{
+max-width:800px;
+width:100%;
+background:#17182e;
+padding:40px;
+border-radius:24px;
+text-align:center;
+box-shadow:0 0 40px rgba(0,0,0,.4);
+}
 
-    input {
-      padding: 14px;
-      width: 70%;
-      border-radius: 10px;
-      border: none;
-      font-size: 18px;
-      margin-top: 20px;
-    }
+h1{
+font-size:56px;
+margin-bottom:10px;
+color:#9b7cff;
+}
 
-    .result {
-      margin-top: 15px;
-      font-size: 22px;
-      color: #8affb5;
-    }
+.subtitle{
+font-size:20px;
+color:#d8d8e8;
+margin-bottom:30px;
+}
 
-    a {
-      display: inline-block;
-      margin-top: 30px;
-      padding: 14px 24px;
-      background: #9b7cff;
-      color: white;
-      text-decoration: none;
-      border-radius: 12px;
-      font-weight: bold;
-    }
-  </style>
+.domain{
+background:#0b0c18;
+border:2px solid #9b7cff;
+padding:18px;
+border-radius:16px;
+font-size:28px;
+font-family:monospace;
+margin-bottom:25px;
+}
+
+input{
+width:100%;
+padding:16px;
+border:none;
+border-radius:12px;
+font-size:18px;
+margin-bottom:20px;
+}
+
+.result{
+font-size:22px;
+color:#89ffb2;
+margin-bottom:30px;
+min-height:30px;
+}
+
+.buttons{
+display:flex;
+justify-content:center;
+gap:15px;
+flex-wrap:wrap;
+}
+
+.btn{
+display:inline-block;
+padding:14px 24px;
+border-radius:12px;
+text-decoration:none;
+font-weight:bold;
+color:white;
+transition:.2s;
+}
+
+.btn:hover{
+transform:translateY(-2px);
+}
+
+.primary{
+background:#9b7cff;
+}
+
+.support{
+background:#ff5f7a;
+}
+
+.info{
+margin-top:40px;
+padding:25px;
+background:#0b0c18;
+border-radius:16px;
+}
+
+.info h3{
+margin-bottom:10px;
+}
+
+.info p{
+color:#d5d5e8;
+line-height:1.6;
+}
+
+.footer{
+margin-top:30px;
+font-size:14px;
+color:#8f8fa8;
+}
+
+</style>
+
 </head>
 <body>
-  <div class="card">
-    <h1>visitme.qzz.io</h1>
-    <p>Get your own free subdomain for your page, portfolio, project or game.</p>
 
-    <div class="domain">
-      yourname.visitme.qzz.io
-    </div>
+<div class="card">
 
-    <input id="nameInput" placeholder="Enter your name" oninput="checkName()" />
+<h1>VisitMe</h1>
 
-    <div class="result" id="result">
-      Type a name to preview your subdomain
-    </div>
+<p class="subtitle">
+Get your free subdomain for websites, portfolios, projects and games.
+</p>
 
-    <a href="https://github.com/n6767ooo6767-cmyk/.visitme.qzz.io/new/main/domains" target="_blank">Request on GitHub</a>
-  </div>
+<div class="domain">
+yourname.visitme.qzz.io
+</div>
 
-  <script>
-    function checkName() {
-      const input = document.getElementById("nameInput");
-      const result = document.getElementById("result");
+<input
+id="nameInput"
+placeholder="Enter your name..."
+oninput="updatePreview()">
 
-      let name = input.value
-        .toLowerCase()
-        .replace(/[^a-z0-9-]/g, "");
+<div class="result" id="result">
+Type a name to preview your subdomain
+</div>
 
-      if (!name) {
-        result.textContent = "Type a name to preview your subdomain";
-        return;
-      }
+<div class="buttons">
 
-      result.textContent = name + ".visitme.qzz.io";
-    }
-  </script>
+<a
+class="btn primary"
+href="https://github.com/n6767ooo6767/visitme.qzz.io"
+target="_blank">
+Get Subdomain
+</a>
+
+<a
+class="btn support"
+href="https://dalink.to/visitme_real"
+target="_blank">
+❤️ Say Thanks
+</a>
+
+</div>
+
+<div class="info">
+
+<h3>Examples</h3>
+
+<p>
+alex.visitme.qzz.io<br>
+game.visitme.qzz.io<br>
+portfolio.visitme.qzz.io<br>
+blog.visitme.qzz.io
+</p>
+
+</div>
+
+<div class="footer">
+VisitMe © 2026
+</div>
+
+</div>
+
+<script>
+
+function updatePreview(){
+
+const input=document.getElementById("nameInput");
+const result=document.getElementById("result");
+
+let value=input.value
+.toLowerCase()
+.replace(/[^a-z0-9-]/g,'');
+
+if(!value){
+result.textContent="Type a name to preview your subdomain";
+return;
+}
+
+result.textContent=value + ".visitme.qzz.io";
+
+}
+
+</script>
+
 </body>
 </html>
