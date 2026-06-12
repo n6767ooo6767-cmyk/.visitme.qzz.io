@@ -1,211 +1,325 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>VisitMe</title>
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box}
 
 body{
-font-family:Arial,Helvetica,sans-serif;
-background:#0f1020;
-color:white;
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-padding:20px;
+  font-family:Arial,sans-serif;
+  min-height:100vh;
+  background:radial-gradient(circle at top left,#7c5cff55,transparent 35%),
+             radial-gradient(circle at bottom right,#00ffd555,transparent 35%),
+             #090a14;
+  color:white;
 }
 
-.card{
-max-width:800px;
-width:100%;
-background:#17182e;
-padding:40px;
-border-radius:24px;
-text-align:center;
-box-shadow:0 0 40px rgba(0,0,0,.4);
+.wrapper{
+  max-width:1100px;
+  margin:auto;
+  padding:40px 20px;
+}
+
+.hero{text-align:center;padding:70px 0 40px}
+
+.badge{
+  display:inline-block;
+  padding:10px 16px;
+  border-radius:999px;
+  background:#ffffff14;
+  border:1px solid #ffffff30;
+  margin-bottom:22px;
 }
 
 h1{
-font-size:56px;
-margin-bottom:10px;
-color:#9b7cff;
+  font-size:clamp(54px,10vw,110px);
+  background:linear-gradient(90deg,#fff,#9b7cff,#00ffd5);
+  -webkit-background-clip:text;
+  color:transparent;
 }
 
 .subtitle{
-font-size:20px;
-color:#d8d8e8;
-margin-bottom:30px;
+  max-width:700px;
+  margin:25px auto;
+  color:#d9d9ed;
+  font-size:22px;
+  line-height:1.5;
+}
+
+.panel{
+  max-width:740px;
+  margin:35px auto;
+  padding:24px;
+  border-radius:28px;
+  background:#111426dd;
+  border:1px solid #ffffff22;
+  box-shadow:0 30px 80px #0008;
 }
 
 .domain{
-background:#0b0c18;
-border:2px solid #9b7cff;
-padding:18px;
-border-radius:16px;
-font-size:28px;
-font-family:monospace;
-margin-bottom:25px;
+  padding:22px;
+  border-radius:18px;
+  background:#050611;
+  border:1px solid #00ffd566;
+  color:#00ffd5;
+  font-family:monospace;
+  font-size:clamp(22px,4vw,36px);
+  word-break:break-all;
 }
 
 input{
-width:100%;
-padding:16px;
-border:none;
-border-radius:12px;
-font-size:18px;
-margin-bottom:20px;
+  width:100%;
+  margin-top:18px;
+  padding:18px;
+  border-radius:16px;
+  border:1px solid #ffffff25;
+  background:#ffffff12;
+  color:white;
+  font-size:20px;
+  outline:none;
 }
 
 .result{
-font-size:22px;
-color:#89ffb2;
-margin-bottom:30px;
-min-height:30px;
+  margin-top:15px;
+  color:#9bffbf;
+  font-size:20px;
+  min-height:28px;
 }
 
 .buttons{
-display:flex;
-justify-content:center;
-gap:15px;
-flex-wrap:wrap;
+  margin-top:28px;
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
 }
 
 .btn{
-display:inline-block;
-padding:14px 24px;
-border-radius:12px;
-text-decoration:none;
-font-weight:bold;
-color:white;
-transition:.2s;
+  padding:16px 24px;
+  border-radius:16px;
+  text-decoration:none;
+  color:white;
+  font-weight:800;
+  transition:.2s;
+  border:1px solid #ffffff20;
+  cursor:pointer;
 }
 
-.btn:hover{
-transform:translateY(-2px);
+.btn:hover{transform:translateY(-3px) scale(1.02)}
+
+.primary{background:linear-gradient(135deg,#7c5cff,#00ffd5);color:#050611}
+.secondary{background:#ffffff14}
+.donate{background:linear-gradient(135deg,#ff4d7d,#ffb86b);color:#19040a}
+
+.grid{
+  margin-top:50px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
 }
 
-.primary{
-background:#9b7cff;
+.card{
+  padding:24px;
+  border-radius:24px;
+  background:#111426dd;
+  border:1px solid #ffffff18;
 }
 
-.support{
-background:#ff5f7a;
+.card h3{font-size:22px;margin-bottom:10px}
+.card p{color:#d0d0e5;line-height:1.5}
+
+.section{
+  margin-top:60px;
+  text-align:center;
 }
 
-.info{
-margin-top:40px;
-padding:25px;
-background:#0b0c18;
-border-radius:16px;
+.section h2{
+  font-size:36px;
+  margin-bottom:22px;
 }
 
-.info h3{
-margin-bottom:10px;
+.links{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
 }
 
-.info p{
-color:#d5d5e8;
-line-height:1.6;
+.link{
+  padding:18px;
+  border-radius:16px;
+  background:#050611;
+  border:1px solid #ffffff18;
+  color:#00ffd5;
+  font-family:monospace;
+}
+
+.random-box{
+  margin-top:60px;
+  padding:35px;
+  border-radius:28px;
+  background:linear-gradient(135deg,#17182e,#101322);
+  border:1px solid #ffffff20;
+  text-align:center;
+}
+
+.random-box p{
+  color:#d6d6e8;
+  margin:12px 0 24px;
 }
 
 .footer{
-margin-top:30px;
-font-size:14px;
-color:#8f8fa8;
+  margin-top:60px;
+  text-align:center;
+  color:#8f8fa8;
+  font-size:14px;
 }
 
+.easter{
+  margin-top:12px;
+  color:#ffdf7c;
+  font-weight:bold;
+  min-height:24px;
+}
 </style>
-
 </head>
+
 <body>
+<div class="wrapper">
 
-<div class="card">
+<section class="hero">
+  <div class="badge">✨ Free tiny homes on the web</div>
 
-<h1>VisitMe</h1>
+  <h1>VisitMe</h1>
 
-<p class="subtitle">
-Get your free subdomain for websites, portfolios, projects and games.
-</p>
+  <p class="subtitle">
+    Get your own free subdomain for your website, portfolio, game, blog or project.
+    Not just links — your tiny home on the web.
+  </p>
 
-<div class="domain">
-yourname.visitme.qzz.io
-</div>
+  <div class="panel">
+    <div class="domain" id="domainPreview">yourname.visitme.qzz.io</div>
 
-<input
-id="nameInput"
-placeholder="Enter your name..."
-oninput="updatePreview()">
+    <input id="nameInput" placeholder="type your name..." oninput="updatePreview()" />
 
-<div class="result" id="result">
-Type a name to preview your subdomain
-</div>
+    <div class="result" id="result">Type a name to preview your subdomain</div>
+    <div class="easter" id="easter"></div>
 
-<div class="buttons">
+    <div class="buttons">
+      <a class="btn primary" href="https://github.com/n6767ooo6767-cmyk/.visitme.qzz.io" target="_blank">
+        Get Subdomain
+      </a>
 
-<a
-class="btn primary"
-href="https://github.com/n6767ooo6767/visitme.qzz.io"
-target="_blank">
-Get Subdomain
-</a>
+      <button class="btn secondary" onclick="randomVisit()">🎲 Random Visit</button>
 
-<a
-class="btn support"
-href="https://dalink.to/visitme_real"
-target="_blank">
-❤️ Say Thanks
-</a>
+      <a class="btn donate" href="https://dalink.to/visitme_real" target="_blank">
+        ❤️ Say Thanks
+      </a>
+    </div>
+  </div>
+</section>
 
-</div>
+<section class="grid">
+  <div class="card">
+    <h3>🌐 Your own address</h3>
+    <p>Create a simple and memorable link for your project.</p>
+  </div>
 
-<div class="info">
+  <div class="card">
+    <h3>🎮 For games</h3>
+    <p>Perfect for game projects, experiments and creative pages.</p>
+  </div>
 
-<h3>Examples</h3>
+  <div class="card">
+    <h3>💻 For creators</h3>
+    <p>Use it for GitHub Pages, portfolios, blogs or personal websites.</p>
+  </div>
 
-<p>
-alex.visitme.qzz.io<br>
-game.visitme.qzz.io<br>
-portfolio.visitme.qzz.io<br>
-blog.visitme.qzz.io
-</p>
+  <div class="card">
+    <h3>🚀 Community powered</h3>
+    <p>VisitMe is built like a tiny open-source internet.</p>
+  </div>
+</section>
 
-</div>
+<section class="section">
+  <h2>Example addresses</h2>
+
+  <div class="links">
+    <div class="link">alex.visitme.qzz.io</div>
+    <div class="link">game.visitme.qzz.io</div>
+    <div class="link">portfolio.visitme.qzz.io</div>
+    <div class="link">blog.visitme.qzz.io</div>
+  </div>
+</section>
+
+<section class="random-box">
+  <h2>🎲 Random Visit</h2>
+  <p>Discover a random creator page from the VisitMe community.</p>
+  <button class="btn primary" onclick="randomVisit()">Visit Random Creator</button>
+</section>
+
+<section class="section">
+  <h2>Why VisitMe?</h2>
+
+  <div class="links">
+    <div class="link">Free</div>
+    <div class="link">Open Source</div>
+    <div class="link">Easy to Share</div>
+    <div class="link">Creator Friendly</div>
+  </div>
+</section>
 
 <div class="footer">
-VisitMe © 2026
+  VisitMe © 2026 · Build your tiny home on the web.
 </div>
 
 </div>
 
 <script>
+const creators = [
+  "alex.visitme.qzz.io",
+  "game.visitme.qzz.io",
+  "portfolio.visitme.qzz.io",
+  "blog.visitme.qzz.io",
+  "site.visitme.qzz.io"
+];
 
 function updatePreview(){
+  const input = document.getElementById("nameInput");
+  const result = document.getElementById("result");
+  const preview = document.getElementById("domainPreview");
+  const easter = document.getElementById("easter");
 
-const input=document.getElementById("nameInput");
-const result=document.getElementById("result");
+  let value = input.value
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g,"")
+    .replace(/--+/g,"-");
 
-let value=input.value
-.toLowerCase()
-.replace(/[^a-z0-9-]/g,'');
+  if(!value){
+    preview.textContent = "yourname.visitme.qzz.io";
+    result.textContent = "Type a name to preview your subdomain";
+    easter.textContent = "";
+    return;
+  }
 
-if(!value){
-result.textContent="Type a name to preview your subdomain";
-return;
+  preview.textContent = value + ".visitme.qzz.io";
+  result.textContent = "Looks good: " + value + ".visitme.qzz.io";
+
+  if(value === "visitme"){
+    easter.textContent = "🎉 You found the secret VisitMe name!";
+  } else if(value === "creator"){
+    easter.textContent = "🚀 Creator mode unlocked!";
+  } else {
+    easter.textContent = "";
+  }
 }
 
-result.textContent=value + ".visitme.qzz.io";
-
+function randomVisit(){
+  const random = creators[Math.floor(Math.random() * creators.length)];
+  window.open("https://" + random, "_blank");
 }
-
 </script>
 
 </body>
