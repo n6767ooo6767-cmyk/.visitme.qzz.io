@@ -3,36 +3,68 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VisitMe — Links</title>
+<title>VisitMe — Бесплатные поддомены</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{min-height:100vh;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at top,#6d4aff55,transparent 35%),radial-gradient(circle at bottom,#00e0c055,transparent 35%),#080914;color:#fff;display:flex;justify-content:center}
 .wrap{width:min(760px,100%);padding:55px 20px 40px;text-align:center}
 .logo{font-size:clamp(52px,12vw,90px);font-weight:900;letter-spacing:-4px;background:linear-gradient(90deg,#fff,#9b7cff,#00ffd5);-webkit-background-clip:text;color:transparent}
 .subtitle{margin:14px auto 32px;color:#d8d8ec;font-size:18px;line-height:1.5}
-.links{display:grid;gap:14px}
-a{display:block;padding:20px;border:1px solid #ffffff22;border-radius:20px;background:#12152ddd;color:#fff;text-decoration:none;font-size:19px;font-weight:800;box-shadow:0 12px 40px #0004;transition:.2s}
-a:hover{transform:translateY(-3px);border-color:#00ffd577;background:#171a31}
-.icon{margin-right:8px}
-.note{margin-top:28px;color:#9292aa;font-size:14px}
-.footer{margin-top:45px;color:#6f7087;font-size:13px}
+.card{padding:26px;border:1px solid #ffffff22;border-radius:20px;background:#12152ddd;box-shadow:0 12px 40px #0004;text-align:left}
+label{display:block;margin:0 0 8px;color:#d8d8ec;font-weight:700}
+input{width:100%;padding:15px;border:1px solid #ffffff22;border-radius:12px;background:#080914;color:#fff;font-size:16px;outline:none;margin-bottom:16px}
+input:focus{border-color:#00ffd577}
+.domain{display:flex;align-items:center;gap:8px;margin-bottom:16px}.domain input{margin:0}.suffix{color:#aaaec5;white-space:nowrap}
+button{width:100%;padding:16px;border:0;border-radius:12px;background:linear-gradient(90deg,#7658ff,#00cfae);color:#fff;font-size:17px;font-weight:800;cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}
+#result{display:none;margin-top:18px;padding:15px;border-radius:12px;line-height:1.5;word-break:break-word}.success{background:#163d28;color:#a7f3c0}.error{background:#421d24;color:#ffb5bf}.resultlink{color:#fff;font-weight:800}
+.links{display:grid;gap:14px;margin-top:22px}a{display:block;padding:18px;border:1px solid #ffffff22;border-radius:18px;background:#12152ddd;color:#fff;text-decoration:none;font-size:18px;font-weight:800;transition:.2s}a:hover{transform:translateY(-2px);border-color:#00ffd577}.icon{margin-right:8px}.note{margin-top:25px;color:#9292aa;font-size:14px;line-height:1.5}.footer{margin-top:45px;color:#6f7087;font-size:13px}
+@media(max-width:560px){.domain{display:block}.suffix{display:block;margin-top:8px}}
 </style>
 </head>
 <body>
 <main class="wrap">
-  <div class="logo">VisitMe</div>
-  <p class="subtitle">Твоя маленькая точка в интернете ✨</p>
-
-  <div class="links">
-    <a href="https://github.com/n6767ooo6767-cmyk/.visitme.qzz.io" target="_blank" rel="noopener"><span class="icon">💻</span>GitHub проекта</a>
-    <a href="https://github.com/n6767ooo6767-cmyk/.visitme.qzz.io/issues/new/choose" target="_blank" rel="noopener"><span class="icon">🌐</span>Получить поддомен</a>
-    <a href="https://github.com/n6767ooo6767-cmyk/.visitme.qzz.io/tree/main/domains" target="_blank" rel="noopener"><span class="icon">📋</span>Список поддоменов</a>
-    <a href="https://github.com/n6767ooo6767-cmyk/.visitme.qzz.io/blob/main/POLICY.md" target="_blank" rel="noopener"><span class="icon">📜</span>Правила</a>
-    <a href="https://github.com/n6767ooo6767-cmyk/.visitme.qzz.io/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener"><span class="icon">🤝</span>Как это работает</a>
-  </div>
-
-  <p class="note">Пока это простая страница ссылок. Позже сюда можно добавить регистрацию аккаунтов и управление ссылками.</p>
-  <div class="footer">VisitMe © 2026</div>
+<div class="logo">VisitMe</div>
+<p class="subtitle">Бесплатный поддомен для твоего GitHub Pages сайта ✨</p>
+<section class="card">
+<label for="subdomain">Имя поддомена</label>
+<div class="domain"><input id="subdomain" type="text" placeholder="my-site" maxlength="63" autocomplete="off"><span class="suffix">.visitme.qzz.io</span></div>
+<label for="target">GitHub Pages URL</label>
+<input id="target" type="url" placeholder="https://username.github.io" autocomplete="off">
+<button id="submit">🌐 Получить поддомен</button>
+<div id="result"></div>
+</section>
+<div class="links">
+<a href="https://github.com/n6767ooo6767-cmyk/.visitme.qzz.io" target="_blank" rel="noopener"><span class="icon">💻</span>GitHub проекта</a>
+<a href="https://github.com/n6767ooo6767-cmyk/.visitme.qzz.io/tree/main/domains" target="_blank" rel="noopener"><span class="icon">📋</span>Список поддоменов</a>
+<a href="https://github.com/n6767ooo6767-cmyk/.visitme.qzz.io/blob/main/POLICY.md" target="_blank" rel="noopener"><span class="icon">📜</span>Правила</a>
+<a href="https://github.com/n6767ooo6767-cmyk/.visitme.qzz.io/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener"><span class="icon">🤝</span>Как это работает</a>
+</div>
+<p class="note">Регистрация выполняется автоматически через Cloudflare Worker. GitHub Issues не нужны.</p>
+<div class="footer">VisitMe © 2026</div>
 </main>
+<script>
+const WORKER_URL="https://cloudflare.n6767ooo6767.workers.dev";
+const subdomainInput=document.getElementById("subdomain");
+const targetInput=document.getElementById("target");
+const button=document.getElementById("submit");
+const result=document.getElementById("result");
+function showResult(message,success){result.style.display="block";result.className=success?"success":"error";result.innerHTML=message}
+button.addEventListener("click",async()=>{
+ const subdomain=subdomainInput.value.trim().toLowerCase();
+ const target=targetInput.value.trim();
+ result.style.display="none";
+ if(!subdomain||!target){showResult("❌ Заполни оба поля.",false);return}
+ if(!/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(subdomain)){showResult("❌ Имя может содержать только a-z, 0-9 и дефис.",false);return}
+ try{const u=new URL(target);if(u.protocol!=="https:"||(u.hostname!=="github.io"&&!u.hostname.endsWith(".github.io"))||u.username||u.password||u.port){showResult("❌ Нужен HTTPS-адрес GitHub Pages, например https://username.github.io",false);return}}catch{showResult("❌ Неверный URL.",false);return}
+ button.disabled=true;button.textContent="Создаём поддомен...";
+ try{
+  const response=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({subdomain,target})});
+  const data=await response.json();
+  if(!response.ok||!data.success)throw new Error(data.error||"Не удалось создать поддомен.");
+  showResult(`✅ Готово!<br><br>Твой поддомен:<br><a class="resultlink" href="${data.domain}" target="_blank" rel="noopener">${data.domain}</a>`,true);
+ }catch(error){showResult("❌ "+error.message,false)}
+ button.disabled=false;button.textContent="🌐 Получить поддомен";
+});
+</script>
 </body>
 </html>
