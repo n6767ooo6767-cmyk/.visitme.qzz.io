@@ -1,4 +1,4 @@
-name: Auto approve subdomain requests
+name: Automatic subdomain registration
 
 on:
   issues:
@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Process request
+      - name: Validate and register subdomain
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
@@ -37,13 +37,8 @@ jobs:
               m = re.search(pattern, body, re.S | re.I)
               return m.group(1).strip() if m else ""
 
-          subdomain = field("Subdomain")
-          target = field("GitHub Pages URL")
-
-          # Keep automatic provisioning intentionally narrow: only GitHub Pages
-          # targets are accepted, and the generated record is JSON only.
-          subdomain = subdomain.lower().strip()
-          target = target.strip().strip('`')
+          subdomain = field("Subdomain").lower().strip()
+          target = field("GitHub Pages URL").strip().strip('`')
           target = target if re.match(r"^https?://", target, re.I) else "https://" + target
 
           valid_name = bool(re.fullmatch(r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?", subdomain))
@@ -64,18 +59,17 @@ jobs:
 
           if not valid_name or subdomain in reserved or not valid_target:
               msg = (
-                  "❌ **Request rejected automatically.**\n\n"
-                  "The request must contain a valid subdomain name and an HTTPS GitHub Pages target "
-                  "(`*.github.io`). No repository files were changed."
+                  "❌ **Заявка отклонена автоматически.**\n\n"
+                  "Нужно указать корректное имя поддомена и HTTPS-адрес GitHub Pages "
+                  "(`*.github.io`). Файлы репозитория не изменены."
               )
               subprocess.run(["gh", "issue", "comment", issue, "--repo", repo, "--body", msg], check=True)
               subprocess.run(["gh", "issue", "close", issue, "--repo", repo], check=True)
               raise SystemExit(0)
 
-          # Prevent overwriting an existing registration.
           out = Path("domains") / f"{subdomain}.json"
           if out.exists():
-              msg = f"❌ **`{subdomain}.visitme.qzz.io` is already registered.**"
+              msg = f"❌ **`{subdomain}.visitme.qzz.io` уже занят.**\n\nВыбери другое имя и создай новую заявку."
               subprocess.run(["gh", "issue", "comment", issue, "--repo", repo, "--body", msg], check=True)
               subprocess.run(["gh", "issue", "close", issue, "--repo", repo], check=True)
               raise SystemExit(0)
@@ -90,13 +84,16 @@ jobs:
           subprocess.run(["git", "config", "user.name", "github-actions[bot]"], check=True)
           subprocess.run(["git", "config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com"], check=True)
           subprocess.run(["git", "add", str(out)], check=True)
-          subprocess.run(["git", "commit", "-m", f"Add subdomain {subdomain}.visitme.qzz.io"], check=True)
+          subprocess.run(["git", "commit", "-m", f"Register {subdomain}.visitme.qzz.io"], check=True)
           subprocess.run(["git", "push"], check=True)
 
+          url = f"https://{subdomain}.visitme.qzz.io"
           msg = (
-              f"✅ **`{subdomain}.visitme.qzz.io` has been registered automatically.**\n\n"
-              f"Target: `{host}`\n\n"
-              "The registration was validated and committed by GitHub Actions."
+              "🎉 **Готово — поддомен зарегистрирован автоматически!**\n\n"
+              f"🌐 **Адрес:** [{url}]({url})\n\n"
+              f"🎯 **Target:** `{host}`\n\n"
+              "Заявка проверена, запись создана и изменения автоматически отправлены в репозиторий. "
+              "Если DNS настроен на чтение каталога `domains`, адрес станет доступен автоматически."
           )
           subprocess.run(["gh", "issue", "comment", issue, "--repo", repo, "--body", msg], check=True)
           subprocess.run(["gh", "issue", "close", issue, "--repo", repo], check=True)
