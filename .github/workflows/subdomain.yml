@@ -27,9 +27,9 @@ jobs:
           REPO: ${{ github.repository }}
         run: |
           python3 - <<'PY'
-          import json, os, re, subprocess, sys
+          import json, os, re, subprocess
           from pathlib import Path
-          from urllib.parse import urlparse
+          from urllib.parse import quote, urlparse
           from urllib.request import Request, urlopen
           from urllib.error import HTTPError, URLError
 
@@ -37,7 +37,7 @@ jobs:
           issue = os.environ["ISSUE_NUMBER"]
           repo = os.environ["REPO"]
           dns_token = os.environ.get("DNS_API_TOKEN", "").strip()
-          zone_name = os.environ["DNS_ZONE_NAME"]
+          zone_name = os.environ["DNS_ZONE_NAME"].strip().lower().rstrip(".")
 
           def gh_comment(message):
               subprocess.run(["gh", "issue", "comment", issue, "--repo", repo, "--body", message], check=True)
@@ -94,10 +94,11 @@ jobs:
               close_issue()
               raise SystemExit(0)
 
-          api = "https://api.cloudflare.com/client/v4"
+          api = "https://desec.io/api/v1"
           headers = {
-              "Authorization": f"Bearer {dns_token}",
+              "Authorization": f"Token {dns_token}",
               "Content-Type": "application/json",
+              "Accept": "application/json",
           }
 
           def api_request(method, url, payload=None):
@@ -105,46 +106,43 @@ jobs:
               req = Request(url, data=data, headers=headers, method=method)
               try:
                   with urlopen(req, timeout=20) as response:
-                      return json.loads(response.read().decode())
+                      raw = response.read().decode()
+                      return json.loads(raw) if raw else {}
               except HTTPError as e:
                   detail = e.read().decode(errors="replace")[:500]
-                  raise RuntimeError(f"DNS API HTTP {e.code}: {detail}")
+                  raise RuntimeError(f"deSEC API HTTP {e.code}: {detail}")
               except URLError as e:
-                  raise RuntimeError(f"DNS API connection error: {e.reason}")
+                  raise RuntimeError(f"deSEC API connection error: {e.reason}")
 
           try:
-              zones = api_request("GET", f"{api}/zones?name={zone_name}&status=active&per_page=1")
-              if not zones.get("success") or not zones.get("result"):
-                  raise RuntimeError(
-                      "Cloudflare zone was not found. Make sure DNS_API_TOKEN has access to "
-                      f"the `{zone_name}` zone."
-                  )
-              zone_id = zones["result"][0]["id"]
+              zone_url = f"{api}/domains/{quote(zone_name, safe='')}/"
+              zone = api_request("GET", zone_url)
+              if zone.get("name", "").lower().rstrip(".") != zone_name:
+                  raise RuntimeError(f"deSEC zone `{zone_name}` was not found or is not owned by this token.")
 
               fqdn = f"{subdomain}.{zone_name}"
-              existing = api_request(
-                  "GET",
-                  f"{api}/zones/{zone_id}/dns_records?type=CNAME&name={fqdn}&per_page=1"
-              )
-              if not existing.get("success"):
-                  raise RuntimeError("Could not check existing DNS records.")
-              if existing.get("result"):
-                  raise RuntimeError(f"DNS record `{fqdn}` already exists.")
+              rrset_url = f"{api}/domains/{quote(zone_name, safe='')}/rrsets/{quote(subdomain, safe='')}/CNAME/"
+
+              try:
+                  existing = api_request("GET", rrset_url)
+                  if existing.get("records"):
+                      raise RuntimeError(f"DNS CNAME `{fqdn}` already exists.")
+              except RuntimeError as exc:
+                  if "HTTP 404" not in str(exc):
+                      raise
 
               created = api_request(
                   "POST",
-                  f"{api}/zones/{zone_id}/dns_records",
+                  f"{api}/domains/{quote(zone_name, safe='')}/rrsets/",
                   {
+                      "subname": subdomain,
                       "type": "CNAME",
-                      "name": fqdn,
-                      "content": host,
-                      "ttl": 1,
-                      "proxied": False,
+                      "ttl": 3600,
+                      "records": [host + "."],
                   },
               )
-              if not created.get("success"):
-                  errors = created.get("errors") or [{"message": "unknown DNS API error"}]
-                  raise RuntimeError("; ".join(str(e.get("message", e)) for e in errors))
+              if not created.get("name"):
+                  raise RuntimeError("deSEC did not confirm the CNAME creation.")
           except Exception as exc:
               gh_comment(
                   "❌ **DNS-регистрация не выполнена.**\n\n"
@@ -173,7 +171,7 @@ jobs:
               "🎉 **Готово — поддомен зарегистрирован автоматически!**\n\n"
               f"🌐 **Адрес:** [{url}]({url})\n\n"
               f"🎯 **Target:** `{host}`\n\n"
-              "Заявка проверена, DNS CNAME создан через DNS API, запись добавлена в репозиторий "
+              "Заявка проверена, DNS CNAME создан через deSEC API, запись добавлена в репозиторий "
               "и изменения автоматически отправлены в `main`."
           )
           gh_comment(msg)
