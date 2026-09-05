@@ -1,0 +1,103 @@
+name: Auto approve subdomain requests
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  provision:
+    if: contains(github.event.issue.labels.*.name, 'subdomain')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Process request
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, subprocess
+          from pathlib import Path
+          from urllib.parse import urlparse
+
+          body = os.environ.get("ISSUE_BODY", "")
+          issue = os.environ["ISSUE_NUMBER"]
+          repo = os.environ["REPO"]
+
+          def field(label):
+              pattern = rf"### {re.escape(label)}\s*\n\s*(.*?)(?=\n### |\Z)"
+              m = re.search(pattern, body, re.S | re.I)
+              return m.group(1).strip() if m else ""
+
+          subdomain = field("Subdomain")
+          target = field("GitHub Pages URL")
+
+          # Keep automatic provisioning intentionally narrow: only GitHub Pages
+          # targets are accepted, and the generated record is JSON only.
+          subdomain = subdomain.lower().strip()
+          target = target.strip().strip('`')
+          target = target if re.match(r"^https?://", target, re.I) else "https://" + target
+
+          valid_name = bool(re.fullmatch(r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?", subdomain))
+          reserved = {
+              "admin", "root", "api", "mail", "ftp", "www", "support",
+              "github", "google", "apple", "microsoft", "discord", "telegram",
+              "bank", "paypal", "login", "signin", "security"
+          }
+          parsed = urlparse(target)
+          host = (parsed.hostname or "").lower().rstrip(".")
+          valid_target = (
+              parsed.scheme == "https"
+              and parsed.username is None
+              and parsed.password is None
+              and parsed.port is None
+              and (host == "github.io" or host.endswith(".github.io"))
+          )
+
+          if not valid_name or subdomain in reserved or not valid_target:
+              msg = (
+                  "❌ **Request rejected automatically.**\n\n"
+                  "The request must contain a valid subdomain name and an HTTPS GitHub Pages target "
+                  "(`*.github.io`). No repository files were changed."
+              )
+              subprocess.run(["gh", "issue", "comment", issue, "--repo", repo, "--body", msg], check=True)
+              subprocess.run(["gh", "issue", "close", issue, "--repo", repo], check=True)
+              raise SystemExit(0)
+
+          # Prevent overwriting an existing registration.
+          out = Path("domains") / f"{subdomain}.json"
+          if out.exists():
+              msg = f"❌ **`{subdomain}.visitme.qzz.io` is already registered.**"
+              subprocess.run(["gh", "issue", "comment", issue, "--repo", repo, "--body", msg], check=True)
+              subprocess.run(["gh", "issue", "close", issue, "--repo", repo], check=True)
+              raise SystemExit(0)
+
+          out.parent.mkdir(parents=True, exist_ok=True)
+          record = {
+              "name_for_URL": f"{subdomain}.visitme.qzz.io",
+              "target": host,
+          }
+          out.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
+
+          subprocess.run(["git", "config", "user.name", "github-actions[bot]"], check=True)
+          subprocess.run(["git", "config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com"], check=True)
+          subprocess.run(["git", "add", str(out)], check=True)
+          subprocess.run(["git", "commit", "-m", f"Add subdomain {subdomain}.visitme.qzz.io"], check=True)
+          subprocess.run(["git", "push"], check=True)
+
+          msg = (
+              f"✅ **`{subdomain}.visitme.qzz.io` has been registered automatically.**\n\n"
+              f"Target: `{host}`\n\n"
+              "The registration was validated and committed by GitHub Actions."
+          )
+          subprocess.run(["gh", "issue", "comment", issue, "--repo", repo, "--body", msg], check=True)
+          subprocess.run(["gh", "issue", "close", issue, "--repo", repo], check=True)
+          PY
