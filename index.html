@@ -39,7 +39,7 @@ button{width:100%;padding:16px;border:0;border-radius:12px;background:linear-gra
 <a href="https://github.com/n6767ooo6767-cmyk/.visitme.qzz.io/blob/main/POLICY.md" target="_blank" rel="noopener"><span class="icon">📜</span>Правила</a>
 <a href="https://github.com/n6767ooo6767-cmyk/.visitme.qzz.io/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener"><span class="icon">🤝</span>Как это работает</a>
 </div>
-<p class="note">Регистрация выполняется автоматически через Cloudflare Worker. GitHub Issues не нужны.</p>
+<p class="note">Регистрация выполняется автоматически через Worker и DNS deSEC. GitHub Issues не нужны.</p>
 <div class="footer">VisitMe © 2026</div>
 </main>
 <script>
@@ -60,8 +60,10 @@ button.addEventListener("click",async()=>{
  try{
   const response=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({subdomain,target})});
   const data=await response.json();
-  if(!response.ok||!data.success)throw new Error(data.error||"Не удалось создать поддомен.");
-  showResult(`✅ Готово!<br><br>Твой поддомен:<br><a class="resultlink" href="${data.domain}" target="_blank" rel="noopener">${data.domain}</a>`,true);
+  if(!response.ok||!data.ok)throw new Error(data.error||"Не удалось создать поддомен.");
+  const domain=String(data.domain||`${subdomain}.visitme.qzz.io`);
+  const safeDomain=domain.replace(/[^a-zA-Z0-9.-]/g,"");
+  showResult(`✅ Готово!<br><br>Твой поддомен:<br><a class="resultlink" href="https://${safeDomain}" target="_blank" rel="noopener">${safeDomain}</a>`,true);
  }catch(error){showResult("❌ "+error.message,false)}
  button.disabled=false;button.textContent="🌐 Получить поддомен";
 });
