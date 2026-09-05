@@ -1,40 +1,48 @@
 # Getting a Subdomain
 
-## Step 1
+## Fully automatic registration
 
-Fork this repository.
+You do **not** need to fork the repository, create files manually, make a Pull Request, or wait for approval.
 
-## Step 2
+1. Open a **Subdomain request** issue.
+2. Enter the subdomain you want, for example `alex`.
+3. Enter your HTTPS GitHub Pages address, for example `alex.github.io`.
+4. Submit the issue.
 
-Create a file in:
+GitHub Actions will automatically:
+
+- validate the subdomain name;
+- reject reserved names;
+- verify that the target is an HTTPS `*.github.io` address;
+- check whether the subdomain is already registered;
+- create `domains/<subdomain>.json`;
+- commit the registration to the repository;
+- post the final `https://<subdomain>.visitme.qzz.io` link in the issue;
+- close the issue automatically.
+
+No manual file creation or Pull Request is required.
+
+## Example
+
+Request:
 
 ```text
-domains/
+Subdomain: alex
+GitHub Pages URL: alex.github.io
 ```
 
-Example:
+The system automatically creates:
 
 ```text
 domains/alex.json
 ```
 
-## Step 3
+with the target and publishes the resulting address:
 
-Add:
-
-```json
-{
-  "owner": "Alex",
-  "target": "alex.github.io"
-}
+```text
+https://alex.visitme.qzz.io
 ```
 
-## Step 4
+## Rules
 
-Create a Pull Request.
-
-## Step 5
-
-Wait for approval.
-
-After approval your subdomain will become active.
+Read `POLICY.md` before submitting a request.
